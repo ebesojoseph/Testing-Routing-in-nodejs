@@ -1,4 +1,5 @@
 const Product =  require('../models/Product');
+const Category =  require('../models/Category')
 const express = require('express');
 const router = express.Router();
 
@@ -12,11 +13,44 @@ const router = express.Router();
  * page
  * limit
  */
+
+// app.get('/products', async (req, res) => {
+// 	const products = await Product.find();
+// 	res.send(products);
+// });
+
+// app.post('/products', async (req, res) => {
+// 	console.log('req.body');
+// 	const product = new Product({
+// 		name: req.body.name,
+// 		price: req.body.price,
+// 		image_url: req.body.image_url,
+// 	});
+// 	await product.save();
+// 	res.status(201).send(product);
+// });
 router.post('/product',async (req,res)=>{
-    const {name, price , category, image_url} = req.body;
-    console.log(req.body);
-    res.status(201).json(req.body);
+    const category = new Category({
+        
+    });
+
+    const product =  new Product(
+        {
+        name: req.body.name,
+		price: req.body.price,
+		image_url: req.body.image_url,
+        category:{
+            name : req.body.category.name,
+            type : req.body.category.type,
+            color : req.body.category.color
+        }
+        }
+    );
     
+    await product.save().then(()=>{
+        res.status(201).json(product);
+
+    });
 });
 
 router.get('/products',(req,res)=>{
